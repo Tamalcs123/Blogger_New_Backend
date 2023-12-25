@@ -1,12 +1,15 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 //create user register user
 module.exports.registerController = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     //validation
     if (!username || !email || !password) {
-      return res.status(400).send({
+      return res.status(200).send({
         success: false,
         message: "Please Fill all fields",
       });
@@ -14,7 +17,7 @@ module.exports.registerController = async (req, res) => {
     //exisiting user
     const exisitingUser = await userModel.findOne({ email });
     if (exisitingUser) {
-      return res.status(401).send({
+      return res.status(200).send({
         success: false,
         message: "user already exisits",
       });
@@ -85,10 +88,15 @@ module.exports.loginController = async (req, res) => {
         message: "Invlid username or password",
       });
     }
+
+    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "1d",
+    });
     return res.status(200).send({
       success: true,
-      messgae: "login successfully",
-      user,
+      messgae: "login successfull",
+      user: user,
+      token: token,
     });
   } catch (error) {
     console.log(error);
