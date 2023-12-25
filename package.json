@@ -4,7 +4,7 @@
   "description": "blog app",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon serevr.js"
+    "start": "nodemon server.js"
   },
   "author": "Tamal Naskar",
   "license": "ISC",
